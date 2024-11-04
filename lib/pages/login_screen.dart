@@ -3,7 +3,6 @@ import 'home_screen.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
-  // Controladores de texto para capturar os dados de entrada
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -29,13 +28,11 @@ class LoginScreen extends StatelessWidget {
   }
 
   bool _isValidEmail(String email) {
-    // Verifica se o e-mail tem formato válido
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
     return emailRegex.hasMatch(email);
   }
 
   bool _isValidPassword(String password) {
-    // Verifica se a senha tem pelo menos 6 caracteres
     return password.length >= 6;
   }
 
@@ -44,12 +41,12 @@ class LoginScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Erro'),
-          content: Text(message),
+          title: Text('Erro', style: TextStyle(fontFamily: 'Poppins')),
+          content: Text(message, style: TextStyle(fontFamily: 'Poppins')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('OK'),
+              child: Text('OK', style: TextStyle(color: Color(0xFF4A90E2))),
             ),
           ],
         );
@@ -61,25 +58,55 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text('Login', style: TextStyle(fontFamily: 'Poppins')),
+        backgroundColor: Color(0xFFA0D3E8), // Azul pastel claro
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'E-mail'),
+              decoration: InputDecoration(
+                labelText: 'E-mail',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                filled: true,
+                fillColor: Color(0xFFE8F5FA), // Azul muito claro
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 20.0), // Ajuste do padding
+              ),
+              style: TextStyle(fontFamily: 'Poppins'),
             ),
+            SizedBox(height: 16.0),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Senha'),
+              decoration: InputDecoration(
+                labelText: 'Senha',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                filled: true,
+                fillColor: Color(0xFFE8F5FA), // Azul muito claro
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 20.0), // Ajuste do padding
+              ),
               obscureText: true,
+              style: TextStyle(fontFamily: 'Poppins'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _login(context),
-              child: Text('Login'),
+              child: Text('Login', style: TextStyle(fontFamily: 'Poppins')),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF6BB7E2), // Azul pastel médio
+                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+              ),
             ),
             SizedBox(height: 10),
             TextButton(
@@ -89,7 +116,13 @@ class LoginScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => SignupScreen()),
                 );
               },
-              child: Text('Não tem uma conta? Cadastre-se!'),
+              child: Text(
+                'Não tem uma conta? Cadastre-se!',
+                style: TextStyle(
+                  color: Color(0xFF4A90E2), // Azul pastel mais escuro
+                  fontFamily: 'Poppins',
+                ),
+              ),
             ),
           ],
         ),

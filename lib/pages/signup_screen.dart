@@ -61,7 +61,11 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tela de Cadastro')),
+      appBar: AppBar(
+        title:
+            Text('Tela de Cadastro', style: TextStyle(fontFamily: 'Poppins')),
+        backgroundColor: Color(0xFFA0D3E8), // Azul pastel claro
+      ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -71,27 +75,66 @@ class _SignupScreenState extends State<SignupScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Nome'),
+                decoration: InputDecoration(
+                  labelText: 'Nome',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFFE8F5FA), // Azul muito claro
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 20.0), // Ajuste do padding
+                ),
                 validator: _validateName,
+                style: TextStyle(fontFamily: 'Poppins'),
               ),
               SizedBox(height: 16.0),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'E-mail'),
+                decoration: InputDecoration(
+                  labelText: 'E-mail',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFFE8F5FA), // Azul muito claro
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 20.0), // Ajuste do padding
+                ),
                 keyboardType: TextInputType.emailAddress,
                 validator: _validateEmail,
+                style: TextStyle(fontFamily: 'Poppins'),
               ),
               SizedBox(height: 16.0),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Senha'),
+                decoration: InputDecoration(
+                  labelText: 'Senha',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFFE8F5FA), // Azul muito claro
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 20.0), // Ajuste do padding
+                ),
                 obscureText: true,
                 validator: _validatePassword,
+                style: TextStyle(fontFamily: 'Poppins'),
               ),
               SizedBox(height: 32.0),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text('Cadastrar'),
+                child:
+                    Text('Cadastrar', style: TextStyle(fontFamily: 'Poppins')),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF6BB7E2), // Azul pastel médio
+                  padding:
+                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                ),
               ),
             ],
           ),
