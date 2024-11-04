@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'create_deck_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -85,7 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
-              // Navegar para a tela de perfil
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileScreen()), // Navega para a tela de perfil
+              );
             },
           ),
           IconButton(
