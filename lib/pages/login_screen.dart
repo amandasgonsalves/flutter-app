@@ -1,93 +1,59 @@
 import 'package:flutter/material.dart';
-import 'signup_screen.dart';
+import 'home_screen.dart';
+import 'signup_screen.dart'; // Certifique-se de importar a tela de cadastro
 
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'O e-mail é obrigatório';
-    }
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!emailRegex.hasMatch(value)) {
-      return 'Digite um e-mail válido';
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'A senha é obrigatória';
-    }
-    if (value.length < 6) {
-      return 'A senha deve ter pelo menos 6 caracteres';
-    }
-    return null;
-  }
-
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      // Aqui você poderia realizar a ação de login.
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login realizado com sucesso!')),
-      );
-    }
-  }
+class LoginScreen extends StatelessWidget {
+  // Controladores de texto para capturar os dados de entrada
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tela de Login')),
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'E-mail'),
-                keyboardType: TextInputType.emailAddress,
-                validator: _validateEmail,
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Senha'),
-                obscureText: true,
-                validator: _validatePassword,
-              ),
-              SizedBox(height: 32.0),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Login'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignupScreen()),
-                  );
-                },
-                child: Text('Não tem uma conta? Cadastre-se!'),
-              ),
-            ],
-          ),
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(labelText: 'E-mail'),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(labelText: 'Senha'),
+              obscureText: true,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Aqui você pode adicionar sua lógica de autenticação
+                // Se a autenticação for bem-sucedida, navegue para a tela de baralhos
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomeScreen()), // Navega para a tela de baralhos
+                );
+              },
+              child: Text('Login'),
+            ),
+            SizedBox(height: 10),
+            TextButton(
+              onPressed: () {
+                // Navegar para a tela de cadastro
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          SignupScreen()), // Navega para a tela de cadastro
+                );
+              },
+              child: Text('Não tem uma conta? Cadastre-se!'),
+            ),
+          ],
         ),
       ),
     );

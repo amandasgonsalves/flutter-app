@@ -13,16 +13,24 @@ class ReviewScreen extends StatefulWidget {
 class _ReviewScreenState extends State<ReviewScreen> {
   late int _currentIndex;
   bool _showFront = true;
+  List<DateTime?> _reviewDates =
+      []; // Para armazenar as datas de revisão dos cards
 
   @override
   void initState() {
     super.initState();
     _shuffleCards();
     _currentIndex = 0;
+    _initializeReviewDates();
   }
 
   void _shuffleCards() {
     widget.cards.shuffle(Random()); // Embaralha os cards
+  }
+
+  void _initializeReviewDates() {
+    // Inicializa as datas de revisão como nulas
+    _reviewDates = List.generate(widget.cards.length, (index) => null);
   }
 
   void _nextCard() {
@@ -32,9 +40,46 @@ class _ReviewScreenState extends State<ReviewScreen> {
     });
   }
 
+  void _setReviewDate(String difficulty) {
+    DateTime nextReviewDate;
+
+    switch (difficulty) {
+      case 'DIFÍCIL':
+        nextReviewDate =
+            DateTime.now().add(Duration(days: 0)); // Revisar novamente no final
+        break;
+      case 'BOM':
+        nextReviewDate =
+            DateTime.now().add(Duration(days: 1)); // Revisar em 24h
+        break;
+      case 'FÁCIL':
+        nextReviewDate =
+            DateTime.now().add(Duration(days: 2)); // Revisar em 48h
+        break;
+      default:
+        return;
+    }
+
+    setState(() {
+      _reviewDates[_currentIndex] =
+          nextReviewDate; // Atualiza a data de revisão do card atual
+    });
+
+    _nextCard(); // Avança para o próximo card
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (widget.cards.isEmpty) {
+    // Filtra os cards para mostrar apenas os que precisam ser revisados
+    final availableCards = widget.cards.asMap().entries.where((entry) {
+      final index = entry.key;
+      final card = entry.value;
+      final reviewDate = _reviewDates[index];
+
+      return reviewDate == null || DateTime.now().isAfter(reviewDate);
+    }).toList();
+
+    if (availableCards.isEmpty) {
       return Scaffold(
         appBar: AppBar(title: Text('Revisão')),
         body: Center(
@@ -43,7 +88,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
       );
     }
 
-    final card = widget.cards[_currentIndex];
+    final card = availableCards[_currentIndex].value;
+
     return Scaffold(
       appBar: AppBar(title: Text('Revisão')),
       body: Center(
@@ -66,10 +112,30 @@ class _ReviewScreenState extends State<ReviewScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _nextCard,
-        child: Icon(Icons.arrow_forward),
-      ),
+      floatingActionButton: _showFront
+          ? FloatingActionButton(
+              onPressed: _nextCard,
+              child: Icon(Icons.arrow_forward),
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () => _setReviewDate('DIFÍCIL'),
+                  child: Text('Difícil'),
+                ),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () => _setReviewDate('BOM'),
+                  child: Text('Bom'),
+                ),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () => _setReviewDate('FÁCIL'),
+                  child: Text('Fácil'),
+                ),
+              ],
+            ),
     );
   }
 }

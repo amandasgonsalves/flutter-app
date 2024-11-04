@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'login_screen.dart'; // Importe sua tela de login
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -6,54 +7,33 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Configurações'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context); // Volta para a tela anterior
-          },
-        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Botão de Personalizar Estudo
-            ElevatedButton(
-              onPressed: () {
-                // Lógica para personalizar estudo
-              },
-              child: Text('Personalizar Estudo'),
-            ),
-            SizedBox(height: 16),
-
-            // Botão de Configurações de Perfil
-            ElevatedButton(
-              onPressed: () {
-                // Lógica para configurações de perfil
-              },
-              child: Text('Configurações de Perfil'),
-            ),
-            SizedBox(height: 16),
-
-            // Botão de Preferências de Notificações
-            ElevatedButton(
-              onPressed: () {
-                // Lógica para preferências de notificações
-              },
-              child: Text('Preferências de Notificações'),
-            ),
-            SizedBox(height: 16),
-
-            // Botão de Sair
-            ElevatedButton(
-              onPressed: () {
-                // Lógica para sair
-              },
-              child: Text('Sair'),
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          ListTile(
+            title: Text('Personalizar Estudo'),
+            onTap: () {
+              // Adicione a lógica para personalizar estudo
+            },
+          ),
+          ListTile(
+            title: Text('Configurações de Perfil'),
+            onTap: () {
+              // Adicione a lógica para configurações de perfil
+            },
+          ),
+          ListTile(
+            title: Text('Sair'),
+            onTap: () {
+              // Navega de volta para a tela de login
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                (route) => false, // Remove todas as rotas anteriores
+              );
+            },
+          ),
+        ],
       ),
     );
   }
