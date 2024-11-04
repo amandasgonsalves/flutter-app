@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('NBA Finals'),
+        title: Text('AMANDA'),
       ),
       body: ListView.separated(
         itemCount: controller.tabela.length,
