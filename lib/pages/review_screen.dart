@@ -13,71 +13,74 @@ class ReviewScreen extends StatefulWidget {
 class _ReviewScreenState extends State<ReviewScreen> {
   late int _currentIndex;
   bool _showFront = true;
-  List<DateTime?> _reviewDates =
-      []; // Para armazenar as datas de revisão dos cards
+  List<int> _reviewCounts =
+      []; // Quantas vezes cada card ainda precisa aparecer
 
   @override
   void initState() {
     super.initState();
     _shuffleCards();
     _currentIndex = 0;
-    _initializeReviewDates();
+    _initializeReviewCounts();
   }
 
   void _shuffleCards() {
     widget.cards.shuffle(Random()); // Embaralha os cards
   }
 
-  void _initializeReviewDates() {
-    // Inicializa as datas de revisão como nulas
-    _reviewDates = List.generate(widget.cards.length, (index) => null);
+  void _initializeReviewCounts() {
+    // Inicializa os contadores de revisões com 1 (para aparecer pelo menos uma vez)
+    _reviewCounts = List.generate(widget.cards.length, (index) => 1);
   }
 
   void _nextCard() {
     setState(() {
-      _currentIndex = (_currentIndex + 1) % widget.cards.length;
+      _currentIndex = (_currentIndex + 1) % _getAvailableCards().length;
       _showFront = true;
     });
   }
 
   void _setReviewDate(String difficulty) {
-    DateTime nextReviewDate;
+    int additionalReviews;
 
     switch (difficulty) {
       case 'DIFÍCIL':
-        nextReviewDate =
-            DateTime.now().add(Duration(days: 0)); // Revisar novamente no final
+        additionalReviews = 2; // Aparece mais duas vezes
         break;
       case 'BOM':
-        nextReviewDate =
-            DateTime.now().add(Duration(days: 1)); // Revisar em 24h
+        additionalReviews = 1; // Aparece mais uma vez
         break;
       case 'FÁCIL':
-        nextReviewDate =
-            DateTime.now().add(Duration(days: 2)); // Revisar em 48h
+        additionalReviews = 0; // Não aparece mais
         break;
       default:
         return;
     }
 
     setState(() {
-      _reviewDates[_currentIndex] =
-          nextReviewDate; // Atualiza a data de revisão do card atual
+      _reviewCounts[_currentIndex] =
+          additionalReviews; // Define a contagem de revisões do card atual
+      _nextCard(); // Avança para o próximo card
     });
+  }
 
-    _nextCard(); // Avança para o próximo card
+  List<Map<String, String>> _getAvailableCards() {
+    // Filtra os cards para mostrar apenas os que ainda precisam ser revisados
+    return widget.cards
+        .asMap()
+        .entries
+        .where((entry) {
+          final index = entry.key;
+          return _reviewCounts[index] >
+              0; // Apenas cards com contagem de revisões > 0
+        })
+        .map((entry) => entry.value)
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Filtra os cards para mostrar apenas os que precisam ser revisados
-    final availableCards = widget.cards.asMap().entries.where((entry) {
-      final index = entry.key;
-      final card = entry.value;
-      final reviewDate = _reviewDates[index];
-
-      return reviewDate == null || DateTime.now().isAfter(reviewDate);
-    }).toList();
+    final availableCards = _getAvailableCards();
 
     if (availableCards.isEmpty) {
       return Scaffold(
@@ -88,7 +91,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       );
     }
 
-    final card = availableCards[_currentIndex].value;
+    final card = availableCards[_currentIndex];
 
     return Scaffold(
       appBar: AppBar(title: Text('Revisão')),
