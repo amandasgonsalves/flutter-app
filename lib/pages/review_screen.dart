@@ -59,16 +59,57 @@ class _ReviewScreenState extends State<ReviewScreen> {
   Widget build(BuildContext context) {
     if (_reviewQueue.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: Text('Revisão')),
-        body: Center(child: Text('Nenhum card disponível para revisão.')),
+        appBar: AppBar(
+          title: Text('Revisão',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          centerTitle: true,
+          backgroundColor: Colors.blueAccent, // Cor do fundo da AppBar
+        ),
+        body: Center(
+          child: Container(
+            color: Colors.lightBlue[50], // Cor de fundo do corpo
+            padding: EdgeInsets.all(20), // Espaçamento interno
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons
+                      .sentiment_satisfied, // Ícone feliz para indicar que a revisão foi concluída
+                  size: 80,
+                  color: Colors.green, // Cor do ícone
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Parabéns! Você revisou todos os cards deste baralho!',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black, // Cor do texto
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
       );
     }
 
     final currentCard = _reviewQueue[_currentIndex];
 
     return Scaffold(
-      appBar: AppBar(title: Text('Revisão de Cards')),
-      body: Padding(
+      appBar: AppBar(
+        title: Text('Revisão de Cards', style: TextStyle(fontSize: 24)),
+        centerTitle: true,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.lightBlueAccent, Colors.white],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -108,6 +149,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
               },
               child:
                   Text(_showAnswer ? 'Ocultar Resposta' : 'Mostrar Resposta'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                textStyle: TextStyle(fontSize: 18),
+              ),
             ),
             SizedBox(height: 20),
             Row(
@@ -116,14 +162,23 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 ElevatedButton(
                   onPressed: () => _markDifficulty('difícil'),
                   child: Text('Difícil'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () => _markDifficulty('bom'),
                   child: Text('Bom'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () => _markDifficulty('fácil'),
                   child: Text('Fácil'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                  ),
                 ),
               ],
             ),

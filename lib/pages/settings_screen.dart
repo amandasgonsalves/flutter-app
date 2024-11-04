@@ -8,39 +8,70 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Configurações'),
+        title: Text(
+          'Configurações',
+          style: TextStyle(fontFamily: 'Poppins'),
+        ),
+        backgroundColor: Color(0xFFA0D3E8), // Azul pastel claro
       ),
-      body: Column(
-        children: [
-          ListTile(
-            title: Text('Personalizar Estudo'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CustomizeStudyScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('Configurações de Perfil'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditProfileScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('Sair'),
-            onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-                (route) => false,
-              );
-            },
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(
+                'Personalizar Estudo',
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 18),
+              ),
+              tileColor: Colors.blue[50], // Fundo pastel
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CustomizeStudyScreen()),
+                );
+              },
+            ),
+            SizedBox(height: 16), // Espaçamento entre os itens
+            ListTile(
+              title: Text(
+                'Configurações de Perfil',
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 18),
+              ),
+              tileColor: Colors.blue[50], // Fundo pastel
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditProfileScreen()),
+                );
+              },
+            ),
+            SizedBox(height: 16), // Espaçamento entre os itens
+            ListTile(
+              title: Text(
+                'Sair',
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 18),
+              ),
+              tileColor: Colors.blue[50], // Fundo pastel
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  (route) => false,
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

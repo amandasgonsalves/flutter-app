@@ -57,7 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Criar Novo Baralho'),
+          title: Text('Criar Novo Baralho',
+              style: TextStyle(fontFamily: 'Poppins')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -136,7 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BARALHOS'),
+        title: Text('BARALHOS', style: TextStyle(fontFamily: 'Poppins')),
+        backgroundColor: Color(0xFFA0D3E8), // Azul pastel claro
         actions: [
           IconButton(
             icon: Icon(Icons.person),
@@ -158,48 +160,72 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: _decks.length,
-              itemBuilder: (context, index) {
-                final deck = _decks[index];
-                return ListTile(
-                  title: Text(deck['name'] ?? 'Nome do Baralho'),
-                  subtitle: Text('${deck['description'] ?? 'Sem descrição'}\n'
-                      'Cards: ${deck['cardCount'] ?? '0'}'),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-                          _navigateToCreateDeckScreen(
-                            deck['name'],
-                            deck['description'],
-                            deck['cards'] ?? [],
-                            isEditing: true,
-                          );
-                        },
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: _decks.length,
+                itemBuilder: (context, index) {
+                  final deck = _decks[index];
+                  return Card(
+                    margin: EdgeInsets.symmetric(vertical: 8.0),
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      title: Text(deck['name'] ?? 'Nome do Baralho',
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold)),
+                      subtitle: Text(
+                          '${deck['description'] ?? 'Sem descrição'}\n'
+                          'Cards: ${deck['cardCount'] ?? '0'}',
+                          style: TextStyle(fontFamily: 'Poppins')),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              _navigateToCreateDeckScreen(
+                                deck['name'],
+                                deck['description'],
+                                deck['cards'] ?? [],
+                                isEditing: true,
+                              );
+                            },
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              _navigateToReviewScreen(deck['cards'] ?? []);
+                            },
+                            child: Text('GO'),
+                          ),
+                        ],
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          _navigateToReviewScreen(deck['cards'] ?? []);
-                        },
-                        child: Text('GO'),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: _showCreateDeckDialog,
-            child: Text('Criar Baralho'),
-          ),
-        ],
+            SizedBox(height: 16), // Espaçamento antes do botão
+            ElevatedButton(
+              onPressed: _showCreateDeckDialog,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFA0D3E8), // Azul pastel claro
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text('Criar Baralho',
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 18)),
+            ),
+          ],
+        ),
       ),
     );
   }
