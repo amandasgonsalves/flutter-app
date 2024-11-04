@@ -10,7 +10,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Lista de baralhos com 3 baralhos fixos de exemplo
   List<Map<String, dynamic>> _decks = [
     {
       'name': 'Baralho de Matemática',
@@ -96,8 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _navigateToCreateDeckScreen(String deckName, String description,
-      List<Map<String, String>> cards) async {
+  void _navigateToCreateDeckScreen(
+      String deckName, String description, List<Map<String, String>> cards,
+      {bool isEditing = false}) async {
     final updatedDeck = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -111,13 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (updatedDeck != null) {
       setState(() {
-        final existingDeckIndex =
-            _decks.indexWhere((deck) => deck['name'] == updatedDeck['name']);
-        if (existingDeckIndex >= 0) {
-          _decks[existingDeckIndex] =
-              updatedDeck; // Atualiza o baralho existente
+        if (isEditing) {
+          final index = _decks.indexWhere((deck) => deck['name'] == deckName);
+          if (index >= 0) {
+            _decks[index] = updatedDeck;
+          }
         } else {
-          _decks.add(updatedDeck); // Adiciona novo baralho
+          _decks.add(updatedDeck);
         }
       });
     }
@@ -172,21 +172,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          _navigateToReviewScreen(deck['cards'] ?? []);
-                        },
-                        child: Text('GO'),
-                      ),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: Icon(Icons.edit),
                         onPressed: () {
                           _navigateToCreateDeckScreen(
                             deck['name'],
                             deck['description'],
                             deck['cards'] ?? [],
+                            isEditing: true,
                           );
                         },
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          _navigateToReviewScreen(deck['cards'] ?? []);
+                        },
+                        child: Text('GO'),
                       ),
                     ],
                   ),

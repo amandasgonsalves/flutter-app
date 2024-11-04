@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'edit_card_screen.dart';
 
 class CreateDeckScreen extends StatefulWidget {
   final String deckName;
   final String description;
-  final List<Map<String, String>>
-      initialCards; // Recebe uma lista de cards já existentes
+  final List<Map<String, String>> initialCards;
 
   CreateDeckScreen({
     required this.deckName,
     required this.description,
-    this.initialCards = const [],
+    required this.initialCards,
   });
 
   @override
@@ -17,80 +17,56 @@ class CreateDeckScreen extends StatefulWidget {
 }
 
 class _CreateDeckScreenState extends State<CreateDeckScreen> {
-  List<Map<String, String>> _cards = []; // Armazena os cards do baralho
+  late List<Map<String, String>> _cards;
 
   @override
   void initState() {
     super.initState();
-    _cards =
-        widget.initialCards; // Inicializa com os cards existentes, se houver
+    _cards = widget.initialCards;
   }
 
-  void _showAddCardDialog() {
-    final TextEditingController _frontController = TextEditingController();
-    final TextEditingController _backController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Adicionar Card'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _frontController,
-                decoration: InputDecoration(labelText: 'Frente'),
-              ),
-              TextField(
-                controller: _backController,
-                decoration: InputDecoration(labelText: 'Verso'),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              child: Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              child: Text('Adicionar'),
-              onPressed: () {
-                setState(() {
-                  _cards.add({
-                    'front': _frontController.text,
-                    'back': _backController.text,
-                  });
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+  // Função para editar um card existente
+  void _editCard(int index) async {
+    final updatedCard = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditCardScreen(
+          question: _cards[index]['question'] ?? '',
+          answer: _cards[index]['answer'] ?? '',
+        ),
+      ),
     );
+
+    if (updatedCard != null) {
+      setState(() {
+        _cards[index] = updatedCard;
+      });
+    }
+  }
+
+  // Função para adicionar um novo card
+  void _addNewCard() async {
+    final newCard = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditCardScreen(
+          question: '',
+          answer: '',
+        ),
+      ),
+    );
+
+    if (newCard != null) {
+      setState(() {
+        _cards.add(newCard);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.deckName),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            // Retorna nome, descrição e quantidade de cards atualizada
-            Navigator.of(context).pop({
-              'name': widget.deckName,
-              'description': widget.description,
-              'cardCount': _cards.length.toString(),
-              'cards': _cards, // Inclui os cards atualizados
-            });
-          },
-        ),
-      ),
+      appBar: AppBar(title: Text('Criar Baralho')),
       body: Column(
         children: [
           Expanded(
@@ -99,15 +75,37 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
               itemBuilder: (context, index) {
                 final card = _cards[index];
                 return ListTile(
-                  title: Text(card['front'] ?? ''),
-                  subtitle: Text(card['back'] ?? ''),
+                  title: Text(card['question'] ?? 'Pergunta'),
+                  subtitle: Text(card['answer'] ?? 'Resposta'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      _editCard(index);
+                    },
+                  ),
                 );
               },
             ),
           ),
-          ElevatedButton(
-            onPressed: _showAddCardDialog,
-            child: Text('Adicionar Card'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: _addNewCard,
+                child: Text('Adicionar Card'),
+              ),
+              SizedBox(width: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop({
+                    'name': widget.deckName,
+                    'description': widget.description,
+                    'cards': _cards,
+                  });
+                },
+                child: Text('Salvar Baralho'),
+              ),
+            ],
           ),
         ],
       ),
