@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'create_deck_screen.dart';
 import 'profile_screen.dart';
+import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -97,7 +98,12 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              // Navegar para a tela de configurações
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SettingsScreen()), // Navega para a tela de configurações
+              );
             },
           ),
         ],
