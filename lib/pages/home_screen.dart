@@ -10,7 +10,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Map<String, dynamic>> _decks = []; // Lista de baralhos
+  // Lista de baralhos com 3 baralhos fixos de exemplo
+  List<Map<String, dynamic>> _decks = [
+    {
+      'name': 'Baralho de Matemática',
+      'description': 'Operações básicas e álgebra',
+      'cardCount': 10,
+      'cards': [
+        {'question': '2 + 2', 'answer': '4'},
+        {'question': '3 x 3', 'answer': '9'},
+      ],
+    },
+    {
+      'name': 'Baralho de Ciência',
+      'description': 'Conceitos básicos de física e química',
+      'cardCount': 8,
+      'cards': [
+        {'question': 'Qual a fórmula da água?', 'answer': 'H2O'},
+        {'question': 'Qual é a velocidade da luz?', 'answer': '299,792 km/s'},
+      ],
+    },
+    {
+      'name': 'Baralho de História',
+      'description': 'Fatos importantes do século XX',
+      'cardCount': 5,
+      'cards': [
+        {
+          'question': 'Em que ano ocorreu a Primeira Guerra Mundial?',
+          'answer': '1914'
+        },
+        {
+          'question': 'Quem foi o presidente dos EUA em 1963?',
+          'answer': 'John F. Kennedy'
+        },
+      ],
+    },
+  ];
 
   final TextEditingController _deckNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -108,9 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ProfileScreen()), // Navega para a tela de perfil
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
               );
             },
           ),
@@ -119,9 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        SettingsScreen()), // Navega para a tela de configurações
+                MaterialPageRoute(builder: (context) => SettingsScreen()),
               );
             },
           ),
@@ -145,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           _navigateToReviewScreen(deck['cards'] ?? []);
                         },
-                        child: Text('GO'), // Botão para a tela de revisão
+                        child: Text('GO'),
                       ),
                       IconButton(
                         icon: Icon(Icons.add),

@@ -1,11 +1,61 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
-import 'signup_screen.dart'; // Certifique-se de importar a tela de cadastro
+import 'signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   // Controladores de texto para capturar os dados de entrada
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  void _login(BuildContext context) {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    // Validações
+    if (!_isValidEmail(email)) {
+      _showErrorDialog(context, 'Por favor, insira um e-mail válido.');
+      return;
+    }
+    if (!_isValidPassword(password)) {
+      _showErrorDialog(context, 'A senha deve ter pelo menos 6 caracteres.');
+      return;
+    }
+
+    // Se as validações forem bem-sucedidas, navegue para a tela de baralhos
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen()),
+    );
+  }
+
+  bool _isValidEmail(String email) {
+    // Verifica se o e-mail tem formato válido
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    return emailRegex.hasMatch(email);
+  }
+
+  bool _isValidPassword(String password) {
+    // Verifica se a senha tem pelo menos 6 caracteres
+    return password.length >= 6;
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Erro'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,27 +78,15 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // Aqui você pode adicionar sua lógica de autenticação
-                // Se a autenticação for bem-sucedida, navegue para a tela de baralhos
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          HomeScreen()), // Navega para a tela de baralhos
-                );
-              },
+              onPressed: () => _login(context),
               child: Text('Login'),
             ),
             SizedBox(height: 10),
             TextButton(
               onPressed: () {
-                // Navegar para a tela de cadastro
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          SignupScreen()), // Navega para a tela de cadastro
+                  MaterialPageRoute(builder: (context) => SignupScreen()),
                 );
               },
               child: Text('Não tem uma conta? Cadastre-se!'),
