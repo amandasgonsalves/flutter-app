@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final List<Map<String, dynamic>> decks = [
@@ -31,7 +32,12 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
-              // Navegação para a tela de perfil
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileScreen()), // Navega para a tela de perfil
+              );
             },
           ),
           IconButton(
