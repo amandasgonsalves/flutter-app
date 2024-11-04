@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home_screen.dart';
-import 'package:flutter_application_1/pages/login_screen.dart'; // Certifique-se de que o caminho está correto
 
 void main() {
   runApp(MyApp());
