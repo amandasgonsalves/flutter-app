@@ -31,18 +31,47 @@ class _EditCardScreenState extends State<EditCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Editar Card')),
-      body: Padding(
+      appBar: AppBar(
+        title: Text(
+          'Editar Card',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent, // Cor da AppBar
+      ),
+      body: Container(
+        color: Colors.lightBlue[50], // Cor de fundo do corpo
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: _questionController,
-              decoration: InputDecoration(labelText: 'Pergunta'),
+              decoration: InputDecoration(
+                labelText: 'Pergunta',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(color: Colors.blueAccent),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+              ),
             ),
+            SizedBox(height: 16), // Espaçamento entre os campos
             TextField(
               controller: _answerController,
-              decoration: InputDecoration(labelText: 'Resposta'),
+              decoration: InputDecoration(
+                labelText: 'Resposta',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(color: Colors.blueAccent),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+              ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -52,7 +81,18 @@ class _EditCardScreenState extends State<EditCardScreen> {
                   'answer': _answerController.text,
                 });
               },
-              child: Text('Salvar'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green, // Cor do botão "Salvar"
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(30), // Bordas arredondadas
+                ),
+              ),
+              child: Text(
+                'Salvar',
+                style: TextStyle(fontSize: 18), // Aumentar o tamanho da fonte
+              ),
             ),
           ],
         ),

@@ -66,48 +66,94 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Criar Baralho')),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: _cards.length,
-              itemBuilder: (context, index) {
-                final card = _cards[index];
-                return ListTile(
-                  title: Text(card['question'] ?? 'Pergunta'),
-                  subtitle: Text(card['answer'] ?? 'Resposta'),
-                  trailing: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      _editCard(index);
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: _addNewCard,
-                child: Text('Adicionar Card'),
-              ),
-              SizedBox(width: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop({
-                    'name': widget.deckName,
-                    'description': widget.description,
-                    'cards': _cards,
-                  });
+      appBar: AppBar(
+        title: Text(
+          'Criar Baralho',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent, // Cor da AppBar
+      ),
+      body: Container(
+        color: Colors.lightBlue[50], // Cor de fundo do corpo
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: _cards.length,
+                itemBuilder: (context, index) {
+                  final card = _cards[index];
+                  return Card(
+                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    elevation: 4,
+                    child: ListTile(
+                      title: Text(
+                        card['question'] ?? 'Pergunta',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        card['answer'] ?? 'Resposta',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          _editCard(index);
+                        },
+                      ),
+                    ),
+                  );
                 },
-                child: Text('Salvar Baralho'),
               ),
-            ],
-          ),
-        ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: _addNewCard,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Colors.green, // Cor do botão "Adicionar Card"
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(30), // Bordas arredondadas
+                      ),
+                    ),
+                    child:
+                        Text('Adicionar Card', style: TextStyle(fontSize: 18)),
+                  ),
+                  SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop({
+                        'name': widget.deckName,
+                        'description': widget.description,
+                        'cards': _cards,
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Colors.blue, // Cor do botão "Salvar Baralho"
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(30), // Bordas arredondadas
+                      ),
+                    ),
+                    child:
+                        Text('Salvar Baralho', style: TextStyle(fontSize: 18)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
