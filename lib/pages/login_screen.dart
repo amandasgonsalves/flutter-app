@@ -66,6 +66,14 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Imagem centralizada acima dos campos
+            Center(
+              child: Image.asset(
+                'assets/flash_card.png', // Certifique-se de que este caminho esteja correto
+                height: 100,
+              ),
+            ),
+            SizedBox(height: 35), // Espaço entre a imagem e os campos
             TextField(
               controller: _emailController,
               decoration: InputDecoration(
