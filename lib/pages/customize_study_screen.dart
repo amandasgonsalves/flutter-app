@@ -26,55 +26,97 @@ class _CustomizeStudyScreenState extends State<CustomizeStudyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Personalizar Estudo'),
+        title: Text(
+          'Personalizar Estudo',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent, // Cor da AppBar
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.lightBlue[50], // Cor de fundo do corpo
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            TextFormField(
+            _buildTextField(
               controller: _dailyLimitController,
-              decoration:
-                  InputDecoration(labelText: 'Limite de cartões por dia'),
-              keyboardType: TextInputType.number,
+              label: 'Limite de cartões por dia',
             ),
-            TextFormField(
+            _buildTextField(
               controller: _maxReviewCardsController,
-              decoration:
-                  InputDecoration(labelText: 'Máximo de cartões para revisão'),
-              keyboardType: TextInputType.number,
+              label: 'Máximo de cartões para revisão',
             ),
-            TextFormField(
+            _buildTextField(
               controller: _difficultIntervalController,
-              decoration:
-                  InputDecoration(labelText: 'Intervalo de dias para DIFICIL'),
-              keyboardType: TextInputType.number,
+              label: 'Intervalo de dias para DIFICIL',
             ),
-            TextFormField(
+            _buildTextField(
               controller: _goodIntervalController,
-              decoration:
-                  InputDecoration(labelText: 'Intervalo de dias para BOM'),
-              keyboardType: TextInputType.number,
+              label: 'Intervalo de dias para BOM',
             ),
-            TextFormField(
+            _buildTextField(
               controller: _easyIntervalController,
-              decoration:
-                  InputDecoration(labelText: 'Intervalo de dias para FÁCIL'),
-              keyboardType: TextInputType.number,
+              label: 'Intervalo de dias para FÁCIL',
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Lógica para salvar as configurações
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Configurações salvas com sucesso!')),
+                  SnackBar(
+                    content: Row(
+                      children: [
+                        Icon(Icons.check_circle, color: Colors.white),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text('Configurações salvas com sucesso!'),
+                        ),
+                      ],
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
                 );
                 Navigator.pop(context);
               },
-              child: Text('Salvar'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green, // Cor do botão "Salvar"
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(30), // Bordas arredondadas
+                ),
+              ),
+              child: Text(
+                'Salvar',
+                style: TextStyle(fontSize: 18), // Aumentar o tamanho da fonte
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(color: Colors.blueAccent),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+        ),
+        keyboardType: TextInputType.number,
       ),
     );
   }

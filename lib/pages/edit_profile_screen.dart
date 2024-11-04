@@ -45,44 +45,69 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return null;
   }
 
+  Future<void> _selectBirthDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != DateTime.now()) {
+      setState(() {
+        _birthDateController.text =
+            "${picked.day}/${picked.month}/${picked.year}";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Perfil'),
+        title: Text(
+          'Editar Perfil',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent, // Cor da AppBar
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.lightBlue[50], // Cor de fundo do corpo
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
-              TextFormField(
+              _buildTextField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                label: 'Email',
                 validator: _validateEmail,
               ),
-              TextFormField(
+              _buildTextField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Senha'),
+                label: 'Senha',
                 obscureText: true,
                 validator: _validatePassword,
               ),
-              TextFormField(
+              _buildTextField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Nome'),
+                label: 'Nome',
               ),
-              TextFormField(
+              _buildTextField(
                 controller: _surnameController,
-                decoration: InputDecoration(labelText: 'Sobrenome'),
+                label: 'Sobrenome',
               ),
               TextFormField(
                 controller: _birthDateController,
                 decoration: InputDecoration(
                   labelText: 'Data de Nascimento',
                   hintText: 'DD/MM/AAAA',
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.calendar_today),
+                    onPressed: () => _selectBirthDate(context),
+                  ),
                 ),
-                keyboardType: TextInputType.datetime,
+                readOnly: true,
               ),
               SizedBox(height: 20),
               ElevatedButton(
@@ -90,16 +115,65 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   if (_formKey.currentState!.validate()) {
                     // Lógica para salvar as mudanças
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Perfil atualizado com sucesso!')),
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            Icon(Icons.check_circle, color: Colors.white),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text('Perfil atualizado com sucesso!'),
+                            ),
+                          ],
+                        ),
+                        backgroundColor: Colors.green,
+                      ),
                     );
                     Navigator.pop(context);
                   }
                 },
-                child: Text('Salvar'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // Cor do botão "Salvar"
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(30), // Bordas arredondadas
+                  ),
+                ),
+                child: Text(
+                  'Salvar',
+                  style: TextStyle(fontSize: 18), // Aumentar o tamanho da fonte
+                ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    bool obscureText = false,
+    String? Function(String?)? validator,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(color: Colors.blueAccent),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+        ),
+        obscureText: obscureText,
+        validator: validator,
       ),
     );
   }
