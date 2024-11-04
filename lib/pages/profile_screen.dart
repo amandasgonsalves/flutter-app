@@ -10,13 +10,17 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil'),
+        title: Text(
+          'Perfil',
+          style: TextStyle(fontFamily: 'Poppins'),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context); // Voltar para a tela anterior
           },
         ),
+        backgroundColor: Color(0xFFA0D3E8), // Azul pastel claro
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,13 +33,15 @@ class ProfileScreen extends StatelessWidget {
               radius: 50,
               backgroundImage:
                   AssetImage('assets/user_avatar.png'), // Imagem do usuário
-              // Certifique-se de ter uma imagem com esse nome na pasta assets
             ),
             SizedBox(height: 16), // Espaçamento
             // Nome do usuário
             Text(
               userName,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins'),
             ),
             SizedBox(height: 16),
             // Informações sobre baralhos e dias de ofensiva
@@ -44,14 +50,17 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Text('Baralhos'),
-                    Text('$decksCount'),
+                    Text('Baralhos', style: TextStyle(fontFamily: 'Poppins')),
+                    Text('$decksCount',
+                        style: TextStyle(fontSize: 18, fontFamily: 'Poppins')),
                   ],
                 ),
                 Column(
                   children: [
-                    Text('Dias de Ofensiva'),
-                    Text('$streakDays'),
+                    Text('Dias de Ofensiva',
+                        style: TextStyle(fontFamily: 'Poppins')),
+                    Text('$streakDays',
+                        style: TextStyle(fontSize: 18, fontFamily: 'Poppins')),
                   ],
                 ),
               ],
@@ -64,7 +73,10 @@ class ProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
             // Texto sobre cards revisados hoje
-            Text('Você revisou $reviewedCardsToday cards hoje!'),
+            Text(
+              'Você revisou $reviewedCardsToday cards hoje!',
+              style: TextStyle(fontFamily: 'Poppins'),
+            ),
           ],
         ),
       ),
@@ -88,11 +100,18 @@ class CalendarView extends StatelessWidget {
         return Container(
           margin: EdgeInsets.all(4.0),
           decoration: BoxDecoration(
-            color: hasReviewed ? Colors.blue : Colors.grey[300],
+            color: hasReviewed
+                ? Colors.blue[200]
+                : Colors.grey[300], // Azul pastel para dias revisados
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(
-            child: Text('${index + 1}'), // Mostra o número do dia
+            child: Text(
+              '${index + 1}',
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold), // Fonte fofa
+            ), // Mostra o número do dia
           ),
         );
       },
