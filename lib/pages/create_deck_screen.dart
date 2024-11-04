@@ -11,14 +11,12 @@ class CreateDeckScreen extends StatefulWidget {
 }
 
 class _CreateDeckScreenState extends State<CreateDeckScreen> {
-  final List<Map<String, String>> _cards = [];
-  final TextEditingController _frontController = TextEditingController();
-  final TextEditingController _backController = TextEditingController();
+  final List<Map<String, String>> _cards = []; // Lista para armazenar os cards
 
-  // Função para mostrar o pop-up de adicionar card
+  // Função para mostrar o pop-up de criação de card
   void _showAddCardDialog() {
-    _frontController.clear();
-    _backController.clear();
+    final TextEditingController _frontController = TextEditingController();
+    final TextEditingController _backController = TextEditingController();
 
     showDialog(
       context: context,
@@ -30,11 +28,11 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
             children: [
               TextField(
                 controller: _frontController,
-                decoration: InputDecoration(labelText: 'Frente do Card'),
+                decoration: InputDecoration(labelText: 'Frente'),
               ),
               TextField(
                 controller: _backController,
-                decoration: InputDecoration(labelText: 'Verso do Card'),
+                decoration: InputDecoration(labelText: 'Verso'),
               ),
             ],
           ),
@@ -48,16 +46,13 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
             ElevatedButton(
               child: Text('Adicionar'),
               onPressed: () {
-                if (_frontController.text.isNotEmpty &&
-                    _backController.text.isNotEmpty) {
-                  setState(() {
-                    _cards.add({
-                      'front': _frontController.text,
-                      'back': _backController.text,
-                    });
+                setState(() {
+                  _cards.add({
+                    'front': _frontController.text,
+                    'back': _backController.text,
                   });
-                  Navigator.of(context).pop();
-                }
+                });
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -70,34 +65,35 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.deckName), // Exibe o nome do baralho no AppBar
+        title: Text(widget.deckName),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            // Garante o retorno de dados apenas com nome e descrição
+            Navigator.of(context).pop({
+              'name': widget.deckName,
+              'description': widget.description,
+            });
           },
         ),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: _showAddCardDialog,
-              child: Text('Adicionar Card'),
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: _cards.length,
               itemBuilder: (context, index) {
+                final card = _cards[index];
                 return ListTile(
-                  title: Text(_cards[index]['front'] ?? ''),
-                  subtitle: Text(_cards[index]['back'] ?? ''),
+                  title: Text(card['front'] ?? ''),
+                  subtitle: Text(card['back'] ?? ''),
                 );
               },
             ),
+          ),
+          ElevatedButton(
+            onPressed: _showAddCardDialog,
+            child: Text('Adicionar Card'),
           ),
         ],
       ),

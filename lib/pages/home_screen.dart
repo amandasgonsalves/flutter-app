@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'create_deck_screen.dart'; // Certifique-se de que o caminho está correto
+import 'create_deck_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -7,10 +7,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final List<Map<String, String>> _decks =
+      []; // Lista para armazenar os baralhos
+
   final TextEditingController _deckNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
-  // Função para mostrar o pop-up de criação de baralho
   void _showCreateDeckDialog() {
     _deckNameController.clear();
     _descriptionController.clear();
@@ -43,9 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               child: Text('Criar'),
               onPressed: () {
-                // Fecha o diálogo e navega para a tela de criação de cards
-                Navigator.of(context).pop(); // Fechar o pop-up
-                _navigateToCreateDeckScreen();
+                Navigator.of(context).pop();
+                _navigateToCreateDeckScreen(
+                  _deckNameController.text,
+                  _descriptionController.text,
+                );
               },
             ),
           ],
@@ -54,17 +58,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Navega para a tela de criação de cards, passando o nome e a descrição do baralho
-  void _navigateToCreateDeckScreen() {
-    Navigator.push(
+  void _navigateToCreateDeckScreen(String deckName, String description) async {
+    final newDeck = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => CreateDeckScreen(
-          deckName: _deckNameController.text,
-          description: _descriptionController.text,
+          deckName: deckName,
+          description: description,
         ),
       ),
     );
+
+    if (newDeck != null && newDeck['name'] != null) {
+      setState(() {
+        _decks.add(newDeck);
+      });
+    }
   }
 
   @override
@@ -87,11 +96,31 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: _showCreateDeckDialog,
-          child: Text('Criar Baralho'),
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: _decks.length,
+              itemBuilder: (context, index) {
+                final deck = _decks[index];
+                return ListTile(
+                  title: Text(deck['name'] ?? 'Nome do Baralho'),
+                  subtitle: Text(deck['description'] ?? 'Sem descrição'),
+                  trailing: ElevatedButton(
+                    onPressed: () {
+                      // Iniciar o estudo do baralho
+                    },
+                    child: Text('GO'),
+                  ),
+                );
+              },
+            ),
+          ),
+          ElevatedButton(
+            onPressed: _showCreateDeckDialog,
+            child: Text('Criar Baralho'),
+          ),
+        ],
       ),
     );
   }
