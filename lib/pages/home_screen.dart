@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'create_deck_screen.dart';
+import 'review_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -7,8 +8,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Map<String, String>> _decks =
-      []; // Lista para armazenar os baralhos
+  List<Map<String, dynamic>> _decks = []; // Lista de baralhos
 
   final TextEditingController _deckNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -49,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _navigateToCreateDeckScreen(
                   _deckNameController.text,
                   _descriptionController.text,
+                  [],
                 );
               },
             ),
@@ -58,22 +59,40 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _navigateToCreateDeckScreen(String deckName, String description) async {
-    final newDeck = await Navigator.push(
+  void _navigateToCreateDeckScreen(String deckName, String description,
+      List<Map<String, String>> cards) async {
+    final updatedDeck = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => CreateDeckScreen(
           deckName: deckName,
           description: description,
+          initialCards: cards,
         ),
       ),
     );
 
-    if (newDeck != null && newDeck['name'] != null) {
+    if (updatedDeck != null) {
       setState(() {
-        _decks.add(newDeck);
+        final existingDeckIndex =
+            _decks.indexWhere((deck) => deck['name'] == updatedDeck['name']);
+        if (existingDeckIndex >= 0) {
+          _decks[existingDeckIndex] =
+              updatedDeck; // Atualiza o baralho existente
+        } else {
+          _decks.add(updatedDeck); // Adiciona novo baralho
+        }
       });
     }
+  }
+
+  void _navigateToReviewScreen(List<Map<String, String>> cards) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReviewScreen(cards: cards),
+      ),
+    );
   }
 
   @override
@@ -106,12 +125,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 return ListTile(
                   title: Text(deck['name'] ?? 'Nome do Baralho'),
                   subtitle: Text('${deck['description'] ?? 'Sem descrição'}\n'
-                      'Cards: ${deck['cardCount'] ?? '0'}'), // Exibe a contagem de cards
-                  trailing: ElevatedButton(
-                    onPressed: () {
-                      // Iniciar o estudo do baralho
-                    },
-                    child: Text('GO'),
+                      'Cards: ${deck['cardCount'] ?? '0'}'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          _navigateToReviewScreen(deck['cards'] ?? []);
+                        },
+                        child: Text('GO'), // Botão para a tela de revisão
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          _navigateToCreateDeckScreen(
+                            deck['name'],
+                            deck['description'],
+                            deck['cards'] ?? [],
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 );
               },

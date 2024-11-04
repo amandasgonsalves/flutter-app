@@ -3,15 +3,28 @@ import 'package:flutter/material.dart';
 class CreateDeckScreen extends StatefulWidget {
   final String deckName;
   final String description;
+  final List<Map<String, String>>
+      initialCards; // Recebe uma lista de cards já existentes
 
-  CreateDeckScreen({required this.deckName, required this.description});
+  CreateDeckScreen({
+    required this.deckName,
+    required this.description,
+    this.initialCards = const [],
+  });
 
   @override
   _CreateDeckScreenState createState() => _CreateDeckScreenState();
 }
 
 class _CreateDeckScreenState extends State<CreateDeckScreen> {
-  final List<Map<String, String>> _cards = []; // Lista para armazenar os cards
+  List<Map<String, String>> _cards = []; // Armazena os cards do baralho
+
+  @override
+  void initState() {
+    super.initState();
+    _cards =
+        widget.initialCards; // Inicializa com os cards existentes, se houver
+  }
 
   void _showAddCardDialog() {
     final TextEditingController _frontController = TextEditingController();
@@ -68,11 +81,12 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Retorna nome, descrição e quantidade de cards
+            // Retorna nome, descrição e quantidade de cards atualizada
             Navigator.of(context).pop({
               'name': widget.deckName,
               'description': widget.description,
-              'cardCount': _cards.length.toString(), // Conta os cards
+              'cardCount': _cards.length.toString(),
+              'cards': _cards, // Inclui os cards atualizados
             });
           },
         ),
