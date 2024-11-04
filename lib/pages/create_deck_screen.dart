@@ -13,7 +13,6 @@ class CreateDeckScreen extends StatefulWidget {
 class _CreateDeckScreenState extends State<CreateDeckScreen> {
   final List<Map<String, String>> _cards = []; // Lista para armazenar os cards
 
-  // Função para mostrar o pop-up de criação de card
   void _showAddCardDialog() {
     final TextEditingController _frontController = TextEditingController();
     final TextEditingController _backController = TextEditingController();
@@ -69,10 +68,11 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Garante o retorno de dados apenas com nome e descrição
+            // Retorna nome, descrição e quantidade de cards
             Navigator.of(context).pop({
               'name': widget.deckName,
               'description': widget.description,
+              'cardCount': _cards.length.toString(), // Conta os cards
             });
           },
         ),

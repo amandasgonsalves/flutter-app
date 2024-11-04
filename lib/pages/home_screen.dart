@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'create_deck_screen.dart';
-import 'profile_screen.dart';
-import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -87,23 +85,13 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ProfileScreen()), // Navega para a tela de perfil
-              );
+              // Navegar para a tela de perfil
             },
           ),
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        SettingsScreen()), // Navega para a tela de configurações
-              );
+              // Navegar para a tela de configurações
             },
           ),
         ],
@@ -117,7 +105,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 final deck = _decks[index];
                 return ListTile(
                   title: Text(deck['name'] ?? 'Nome do Baralho'),
-                  subtitle: Text(deck['description'] ?? 'Sem descrição'),
+                  subtitle: Text('${deck['description'] ?? 'Sem descrição'}\n'
+                      'Cards: ${deck['cardCount'] ?? '0'}'), // Exibe a contagem de cards
                   trailing: ElevatedButton(
                     onPressed: () {
                       // Iniciar o estudo do baralho
