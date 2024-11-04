@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'profile_screen.dart';
+import 'settings_screen.dart';
+import 'create_deck_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final List<Map<String, dynamic>> decks = [
@@ -43,7 +45,12 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              // Navegação para a tela de configurações
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SettingsScreen()), // Navega para a tela de configurações
+              );
             },
           ),
         ],
@@ -83,9 +90,14 @@ class HomeScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // Ação para criar um novo baralho
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CreateDeckScreen()), // Navega para a tela de criar baralho
+                );
               },
-              child: Text('CRIAR BARALHO'),
+              child: Text('Criar Baralho'),
             ),
           ],
         ),
