@@ -10,15 +10,9 @@ O **Flash Card App** é um aplicativo desenvolvido em Flutter que oferece uma ex
 - **Criação de Cartões**: Interface intuitiva para adicionar novos cartões com perguntas e respostas.
 - **Revisão de Cartões**: Mecanismo para revisar os cartões existentes e testar o conhecimento.
 
-## Bugs Conhecidos
-
-- **Bug 1**: Descrição do bug e como reproduzi-lo.
-- **Bug 2**: Descrição do bug e como reproduzi-lo.
-
 ## Funcionalidades Faltantes
 
-- **Funcionalidade 1**: Descrição da funcionalidade que está planejada ou que precisa ser implementada.
-- **Funcionalidade 2**: Descrição da funcionalidade que está planejada ou que precisa ser implementada.
+- **Funcionalidade 1**: O domínio do email não é verificado, apenas se é utilziado @ em sua escrita.
 
 ## Tecnologias Utilizadas
 
