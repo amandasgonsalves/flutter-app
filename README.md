@@ -31,7 +31,7 @@ Siga os passos abaixo para rodar o aplicativo localmente:
 
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/seu_usuario/flutter-app.git
+   git clone https://github.com/amandasgonsalves/flutter-app.git
 
 2. Navegue até o diretório do projeto:
    ```bash
