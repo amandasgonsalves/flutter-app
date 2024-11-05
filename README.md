@@ -1,3 +1,2 @@
-# flutter_application_1
+# ANKI Flutter App
 
-A new Flutter project.
