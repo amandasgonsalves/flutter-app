@@ -35,7 +35,7 @@ Siga os passos abaixo para rodar o aplicativo localmente:
 
 2. Navegue até o diretório do projeto:
    ```bash
-   cd flash_card_app
+   cd flutter-app
 
 3. Instale as dependências:
    ```bash
