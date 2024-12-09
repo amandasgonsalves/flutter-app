@@ -1,41 +1,59 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
-import 'signup_screen.dart';
+import 'package:hive/hive.dart';
+import 'home_screen.dart'; // Certifique-se de que este arquivo esteja presente
+import 'signup_screen.dart'; // Certifique-se de que este arquivo esteja presente
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _login(BuildContext context) {
-    String email = _emailController.text.trim();
+  // Função para realizar o login
+  void _login(BuildContext context) async {
+    String username = _usernameController.text.trim();
     String password = _passwordController.text.trim();
 
-    // Validações
-    if (!_isValidEmail(email)) {
+    // Validação de e-mail e senha
+    if (!_isValidEmail(username)) {
       _showErrorDialog(context, 'Por favor, insira um e-mail válido.');
       return;
     }
+
     if (!_isValidPassword(password)) {
       _showErrorDialog(context, 'A senha deve ter pelo menos 6 caracteres.');
       return;
     }
 
-    // Se as validações forem bem-sucedidas, navegue para a tela de baralhos
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-    );
+    // Abertura da box no Hive
+    var box = await Hive.openBox('users');
+
+    // Verifica as credenciais no Hive
+    if (box.get(username) == password) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login bem-sucedido!')),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Usuário ou senha inválidos!')),
+      );
+    }
   }
 
+  // Função para verificar o formato do e-mail
   bool _isValidEmail(String email) {
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
     return emailRegex.hasMatch(email);
   }
 
+  // Função para validar a senha
   bool _isValidPassword(String password) {
     return password.length >= 6;
   }
 
+  // Função para mostrar o erro
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
@@ -74,8 +92,9 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 35), // Espaço entre a imagem e os campos
+            // Campo de e-mail (ou nome de usuário)
             TextField(
-              controller: _emailController,
+              controller: _usernameController,
               decoration: InputDecoration(
                 labelText: 'E-mail',
                 border: OutlineInputBorder(
@@ -89,6 +108,7 @@ class LoginScreen extends StatelessWidget {
               style: TextStyle(fontFamily: 'Poppins'),
             ),
             SizedBox(height: 16.0),
+            // Campo de senha
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
@@ -105,6 +125,7 @@ class LoginScreen extends StatelessWidget {
               style: TextStyle(fontFamily: 'Poppins'),
             ),
             SizedBox(height: 20),
+            // Botão de login
             ElevatedButton(
               onPressed: () => _login(context),
               child: Text('Login', style: TextStyle(fontFamily: 'Poppins')),
@@ -117,6 +138,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
+            // Link para a tela de cadastro
             TextButton(
               onPressed: () {
                 Navigator.push(

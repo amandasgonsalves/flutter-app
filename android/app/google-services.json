@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "421222999937",
+    "project_id": "appamanda-92000",
+    "storage_bucket": "appamanda-92000.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421222999937:android:3880d1c1babdbc5564ea80",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJHbCgE0gv-opz9WdaVx8THfUC9hIbtb4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
