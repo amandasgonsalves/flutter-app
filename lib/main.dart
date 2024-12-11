@@ -5,10 +5,10 @@ import 'package:flutter_application_1/pages/signup_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('users'); // Abre a box de usuários
+  await Hive.openBox('users'); // Abra a caixa 'users'
   runApp(MyApp());
 }
 
