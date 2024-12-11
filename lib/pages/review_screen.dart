@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ReviewScreen extends StatefulWidget {
   final List<Map<String, String>> cards;
 
-  ReviewScreen({required this.cards});
+  const ReviewScreen({super.key, required this.cards});
 
   @override
   _ReviewScreenState createState() => _ReviewScreenState();
@@ -60,7 +60,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     if (_reviewQueue.isEmpty) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Revisão',
+          title: const Text('Revisão',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           centerTitle: true,
           backgroundColor: Colors.blueAccent, // Cor do fundo da AppBar
@@ -68,8 +68,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
         body: Center(
           child: Container(
             color: Colors.lightBlue[50], // Cor de fundo do corpo
-            padding: EdgeInsets.all(20), // Espaçamento interno
-            child: Column(
+            padding: const EdgeInsets.all(20), // Espaçamento interno
+            child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
@@ -99,11 +99,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Revisão de Cards', style: TextStyle(fontSize: 24)),
+        title: const Text('Revisão de Cards', style: TextStyle(fontSize: 24)),
         centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.lightBlueAccent, Colors.white],
             begin: Alignment.topLeft,
@@ -114,71 +114,72 @@ class _ReviewScreenState extends State<ReviewScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Pergunta:',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               currentCard['question'] ?? '',
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             if (_showAnswer)
               Column(
                 children: [
-                  Text(
+                  const Text(
                     'Resposta:',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     currentCard['answer'] ?? '',
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
                 setState(() {
                   _showAnswer = !_showAnswer;
                 });
               },
-              child:
-                  Text(_showAnswer ? 'Ocultar Resposta' : 'Mostrar Resposta'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                textStyle: TextStyle(fontSize: 18),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                textStyle: const TextStyle(fontSize: 18),
               ),
+              child:
+                  Text(_showAnswer ? 'Ocultar Resposta' : 'Mostrar Resposta'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
                   onPressed: () => _markDifficulty('difícil'),
-                  child: Text('Difícil'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
+                  child: Text('Difícil'),
                 ),
                 ElevatedButton(
                   onPressed: () => _markDifficulty('bom'),
-                  child: Text('Bom'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                   ),
+                  child: Text('Bom'),
                 ),
                 ElevatedButton(
                   onPressed: () => _markDifficulty('fácil'),
-                  child: Text('Fácil'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
+                  child: Text('Fácil'),
                 ),
               ],
             ),

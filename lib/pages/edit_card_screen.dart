@@ -4,7 +4,8 @@ class EditCardScreen extends StatefulWidget {
   final String question;
   final String answer;
 
-  EditCardScreen({required this.question, required this.answer});
+  const EditCardScreen(
+      {super.key, required this.question, required this.answer});
 
   @override
   _EditCardScreenState createState() => _EditCardScreenState();
@@ -32,7 +33,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Editar Card',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
@@ -50,30 +51,30 @@ class _EditCardScreenState extends State<EditCardScreen> {
                 labelText: 'Pergunta',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide(color: Colors.blueAccent),
+                  borderSide: const BorderSide(color: Colors.blueAccent),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide(color: Colors.blue),
+                  borderSide: const BorderSide(color: Colors.blue),
                 ),
               ),
             ),
-            SizedBox(height: 16), // Espaçamento entre os campos
+            const SizedBox(height: 16), // Espaçamento entre os campos
             TextField(
               controller: _answerController,
               decoration: InputDecoration(
                 labelText: 'Resposta',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide(color: Colors.blueAccent),
+                  borderSide: const BorderSide(color: Colors.blueAccent),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide(color: Colors.blue),
+                  borderSide: const BorderSide(color: Colors.blue),
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop({
@@ -83,13 +84,14 @@ class _EditCardScreenState extends State<EditCardScreen> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green, // Cor do botão "Salvar"
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.circular(30), // Bordas arredondadas
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'Salvar',
                 style: TextStyle(fontSize: 18), // Aumentar o tamanho da fonte
               ),

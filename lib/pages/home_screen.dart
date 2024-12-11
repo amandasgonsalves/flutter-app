@@ -5,12 +5,14 @@ import 'review_screen.dart';
 import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Map<String, dynamic>> _decks = [
+  final List<Map<String, dynamic>> _decks = [
     {
       'name': 'Baralho de Matemática',
       'description': 'Operações básicas e álgebra',
@@ -57,30 +59,31 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Criar Novo Baralho',
+          title: const Text('Criar Novo Baralho',
               style: TextStyle(fontFamily: 'Poppins')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: _deckNameController,
-                decoration: InputDecoration(labelText: 'Nome do Baralho'),
+                decoration: const InputDecoration(labelText: 'Nome do Baralho'),
               ),
               TextField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Descrição (opcional)'),
+                decoration:
+                    const InputDecoration(labelText: 'Descrição (opcional)'),
               ),
             ],
           ),
           actions: [
             TextButton(
-              child: Text('Cancelar'),
+              child: const Text('Cancelar'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
-              child: Text('Criar'),
+              child: const Text('Criar'),
               onPressed: () {
                 Navigator.of(context).pop();
                 _navigateToCreateDeckScreen(
@@ -137,11 +140,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BARALHOS', style: TextStyle(fontFamily: 'Poppins')),
-        backgroundColor: Color(0xFFA0D3E8), // Azul pastel claro
+        title: const Text('BARALHOS', style: TextStyle(fontFamily: 'Poppins')),
+        backgroundColor: const Color(0xFFA0D3E8), // Azul pastel claro
         actions: [
           IconButton(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             onPressed: () {
               Navigator.push(
                 context,
@@ -150,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.push(
                 context,
@@ -170,25 +173,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   final deck = _decks[index];
                   return Card(
-                    margin: EdgeInsets.symmetric(vertical: 8.0),
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
                     elevation: 4,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListTile(
                       title: Text(deck['name'] ?? 'Nome do Baralho',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold)),
                       subtitle: Text(
                           '${deck['description'] ?? 'Sem descrição'}\n'
                           'Cards: ${deck['cardCount'] ?? '0'}',
-                          style: TextStyle(fontFamily: 'Poppins')),
+                          style: const TextStyle(fontFamily: 'Poppins')),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            icon: Icon(Icons.edit),
+                            icon: const Icon(Icons.edit),
                             onPressed: () {
                               _navigateToCreateDeckScreen(
                                 deck['name'],
@@ -202,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: () {
                               _navigateToReviewScreen(deck['cards'] ?? []);
                             },
-                            child: Text('GO'),
+                            child: const Text('GO'),
                           ),
                         ],
                       ),
@@ -211,17 +214,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            SizedBox(height: 16), // Espaçamento antes do botão
+            const SizedBox(height: 16), // Espaçamento antes do botão
             ElevatedButton(
               onPressed: _showCreateDeckDialog,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFA0D3E8), // Azul pastel claro
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                backgroundColor: const Color(0xFFA0D3E8), // Azul pastel claro
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text('Criar Baralho',
+              child: const Text('Criar Baralho',
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 18)),
             ),
           ],

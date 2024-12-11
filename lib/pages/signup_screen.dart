@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class SignupScreen extends StatelessWidget {
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,8 @@ class SignupScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 var box = Hive.box('users');
-                String name = _nameController.text;
                 String username = _usernameController.text;
+                String name = _nameController.text;
                 String password = _passwordController.text;
 
                 if (box.containsKey(username)) {
@@ -40,14 +40,11 @@ class SignupScreen extends StatelessWidget {
                     SnackBar(content: Text('Usuário já existe!')),
                   );
                 } else {
-                  box.put(username, {
-                    'name': name,
-                    'password': password,
-                  }); // Salva o nome e a senha
-
+                  box.put(username, password); // Salva o usuário e a senha
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Cadastro realizado com sucesso!')),
                   );
+                  box.put(name, password); // Salva o usuário e a senha
                   Navigator.pop(context); // Retorna à tela de login
                 }
               },
@@ -55,26 +52,6 @@ class SignupScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class WelcomeScreen extends StatelessWidget {
-  final String username;
-
-  WelcomeScreen({required this.username});
-
-  @override
-  Widget build(BuildContext context) {
-    var box = Hive.box('users');
-    String name = box.get(username)['name'];
-
-    return Scaffold(
-      appBar: AppBar(title: Text('Bem-vindo!')),
-      body: Center(
-        child: Text('Olá, $name! Seja bem-vindo(a)!',
-            style: TextStyle(fontSize: 20)),
       ),
     );
   }

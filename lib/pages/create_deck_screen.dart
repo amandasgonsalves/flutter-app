@@ -6,7 +6,8 @@ class CreateDeckScreen extends StatefulWidget {
   final String description;
   final List<Map<String, String>> initialCards;
 
-  CreateDeckScreen({
+  const CreateDeckScreen({
+    super.key,
     required this.deckName,
     required this.description,
     required this.initialCards,
@@ -67,7 +68,7 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Criar Baralho',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
@@ -84,20 +85,21 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
                 itemBuilder: (context, index) {
                   final card = _cards[index];
                   return Card(
-                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     elevation: 4,
                     child: ListTile(
                       title: Text(
                         card['question'] ?? 'Pergunta',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
                         card['answer'] ?? 'Resposta',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                       trailing: IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () {
                           _editCard(index);
                         },
@@ -117,17 +119,17 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           Colors.green, // Cor do botão "Adicionar Card"
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(30), // Bordas arredondadas
                       ),
                     ),
-                    child:
-                        Text('Adicionar Card', style: TextStyle(fontSize: 18)),
+                    child: const Text('Adicionar Card',
+                        style: TextStyle(fontSize: 18)),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop({
@@ -139,15 +141,15 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           Colors.blue, // Cor do botão "Salvar Baralho"
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(30), // Bordas arredondadas
                       ),
                     ),
-                    child:
-                        Text('Salvar Baralho', style: TextStyle(fontSize: 18)),
+                    child: const Text('Salvar Baralho',
+                        style: TextStyle(fontSize: 18)),
                   ),
                 ],
               ),

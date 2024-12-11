@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({super.key});
+
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
 }
@@ -26,7 +28,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   String? _validateEmail(String? value) {
-    final emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    const emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
     final regex = RegExp(emailPattern);
     if (value == null || value.isEmpty) {
       return 'Email é obrigatório';
@@ -64,7 +66,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Editar Perfil',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
@@ -103,19 +105,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   labelText: 'Data de Nascimento',
                   hintText: 'DD/MM/AAAA',
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.calendar_today),
+                    icon: const Icon(Icons.calendar_today),
                     onPressed: () => _selectBirthDate(context),
                   ),
                 ),
                 readOnly: true,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     // Lógica para salvar as mudanças
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Row(
                           children: [
                             Icon(Icons.check_circle, color: Colors.white),
@@ -133,13 +135,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green, // Cor do botão "Salvar"
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(30), // Bordas arredondadas
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Salvar',
                   style: TextStyle(fontSize: 18), // Aumentar o tamanho da fonte
                 ),
@@ -165,11 +168,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           labelText: label,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: Colors.blueAccent),
+            borderSide: const BorderSide(color: Colors.blueAccent),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: Colors.blue),
+            borderSide: const BorderSide(color: Colors.blue),
           ),
         ),
         obscureText: obscureText,

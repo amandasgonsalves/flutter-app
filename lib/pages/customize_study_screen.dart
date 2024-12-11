@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomizeStudyScreen extends StatefulWidget {
+  const CustomizeStudyScreen({super.key});
+
   @override
   _CustomizeStudyScreenState createState() => _CustomizeStudyScreenState();
 }
@@ -26,7 +28,7 @@ class _CustomizeStudyScreenState extends State<CustomizeStudyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Personalizar Estudo',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
@@ -58,12 +60,12 @@ class _CustomizeStudyScreenState extends State<CustomizeStudyScreen> {
               controller: _easyIntervalController,
               label: 'Intervalo de dias para FÁCIL',
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Lógica para salvar as configurações
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     content: Row(
                       children: [
                         Icon(Icons.check_circle, color: Colors.white),
@@ -80,13 +82,14 @@ class _CustomizeStudyScreenState extends State<CustomizeStudyScreen> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green, // Cor do botão "Salvar"
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.circular(30), // Bordas arredondadas
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'Salvar',
                 style: TextStyle(fontSize: 18), // Aumentar o tamanho da fonte
               ),
@@ -109,11 +112,11 @@ class _CustomizeStudyScreenState extends State<CustomizeStudyScreen> {
           labelText: label,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: Colors.blueAccent),
+            borderSide: const BorderSide(color: Colors.blueAccent),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: Colors.blue),
+            borderSide: const BorderSide(color: Colors.blue),
           ),
         ),
         keyboardType: TextInputType.number,
