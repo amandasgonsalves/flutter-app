@@ -46,5 +46,7 @@ Siga os passos abaixo para rodar o aplicativo localmente:
    flutter run
 
    
+## ÚLTIMA ATUALIZAÇÃO
 
+**Hive**: Agora quando cadastrado o usuário, é armazenado o Nome, Email e Senha, dessa forma a autenticação do login é feita e além disso o nome do usuário agora aparece na page de perfil.
 
