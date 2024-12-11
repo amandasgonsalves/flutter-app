@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'signup_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String userName; // Variável que receberá o nome do usuário

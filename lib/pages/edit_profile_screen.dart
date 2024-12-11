@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+  final String initialEmail;
+  final String initialName;
+
+  const EditProfileScreen(
+      {super.key, required this.initialEmail, required this.initialName});
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -15,6 +19,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _surnameController = TextEditingController();
   final _birthDateController = TextEditingController();
   final _languageController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicializando os controladores com os dados passados na navegação
+    _emailController.text = widget.initialEmail;
+    _nameController.text = widget.initialName;
+  }
 
   @override
   void dispose() {
@@ -71,10 +83,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blueAccent, // Cor da AppBar
+        backgroundColor: Colors.blueAccent,
       ),
       body: Container(
-        color: Colors.lightBlue[50], // Cor de fundo do corpo
+        color: Colors.lightBlue[50],
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -108,6 +120,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     icon: const Icon(Icons.calendar_today),
                     onPressed: () => _selectBirthDate(context),
                   ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                 ),
                 readOnly: true,
               ),
@@ -134,17 +149,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green, // Cor do botão "Salvar"
+                  backgroundColor: Colors.green,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(30), // Bordas arredondadas
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: const Text(
                   'Salvar',
-                  style: TextStyle(fontSize: 18), // Aumentar o tamanho da fonte
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
             ],

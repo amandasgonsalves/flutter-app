@@ -50,7 +50,11 @@ class SettingsScreen extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EditProfileScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => EditProfileScreen(
+                            initialEmail: '',
+                            initialName: '',
+                          )),
                 );
               },
             ),
