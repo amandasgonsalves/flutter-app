@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'signup_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final String userName = "Seu Nome"; // Substitua pelo nome do usuário
+  final String userName; // Variável que receberá o nome do usuário
+
+  ProfileScreen({super.key})
+      : userName = Hive.box('users').get('user_name',
+            defaultValue:
+                'Seu Nome'); // Pega o nome do Hive ou usa um valor padrã
   final int decksCount = 5; // Número de baralhos
   final int streakDays = 10; // Dias de revisão consecutivos
   final int reviewedCardsToday = 3;
-
-  const ProfileScreen({super.key}); // Número de cards revisados hoje
 
   @override
   Widget build(BuildContext context) {

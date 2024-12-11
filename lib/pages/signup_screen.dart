@@ -44,7 +44,7 @@ class SignupScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Cadastro realizado com sucesso!')),
                   );
-                  box.put(name, password); // Salva o usuário e a senha
+                  box.put('user_name', name); // Salva o usuário e a senha
                   Navigator.pop(context); // Retorna à tela de login
                 }
               },
