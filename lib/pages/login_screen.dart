@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'home_screen.dart'; // Certifique-se de que este arquivo esteja presente
-import 'signup_screen.dart'; // Certifique-se de que este arquivo esteja presente
+import 'package:crypto/crypto.dart'; // Para hash de senha
+import 'dart:convert';
+import 'home_screen.dart'; // Certifique-se de que esse arquivo esteja presente
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
@@ -26,18 +27,29 @@ class LoginScreen extends StatelessWidget {
     // Abertura da box no Hive
     var box = await Hive.openBox('users');
 
-    // Verifica as credenciais no Hive
-    if (box.get(username) == password) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login bem-sucedido!')),
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
+    // Recuperando o usuário
+    var user = box.get(username);
+
+    if (user != null) {
+      // Verifica se o hash da senha fornecida corresponde ao hash armazenado
+      String hashedPassword = _hashPassword(password);
+
+      if (user['password'] == hashedPassword) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login bem-sucedido!')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Usuário ou senha inválidos!')),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Usuário ou senha inválidos!')),
+        SnackBar(content: Text('Usuário não encontrado!')),
       );
     }
   }
@@ -72,26 +84,25 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
+  // Função para criar hash da senha
+  String _hashPassword(String password) {
+    var bytes = utf8.encode(password); // Codificando senha
+    var digest = sha256.convert(bytes); // Gerando hash SHA256
+    return digest.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login', style: TextStyle(fontFamily: 'Poppins')),
-        backgroundColor: Color(0xFFA0D3E8), // Azul pastel claro
+        backgroundColor: Color(0xFFA0D3E8),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Imagem centralizada acima dos campos
-            Center(
-              child: Image.asset(
-                'assets/flash_card.png', // Certifique-se de que este caminho esteja correto
-                height: 100,
-              ),
-            ),
-            SizedBox(height: 35), // Espaço entre a imagem e os campos
             // Campo de e-mail (ou nome de usuário)
             TextField(
               controller: _usernameController,
@@ -101,9 +112,7 @@ class LoginScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
                 filled: true,
-                fillColor: Color(0xFFE8F5FA), // Azul muito claro
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: 15.0, horizontal: 20.0), // Ajuste do padding
+                fillColor: Color(0xFFE8F5FA),
               ),
               style: TextStyle(fontFamily: 'Poppins'),
             ),
@@ -117,9 +126,7 @@ class LoginScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
                 filled: true,
-                fillColor: Color(0xFFE8F5FA), // Azul muito claro
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: 15.0, horizontal: 20.0), // Ajuste do padding
+                fillColor: Color(0xFFE8F5FA),
               ),
               obscureText: true,
               style: TextStyle(fontFamily: 'Poppins'),
@@ -130,27 +137,10 @@ class LoginScreen extends StatelessWidget {
               onPressed: () => _login(context),
               child: Text('Login', style: TextStyle(fontFamily: 'Poppins')),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF6BB7E2), // Azul pastel médio
+                backgroundColor: Color(0xFF6BB7E2),
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            // Link para a tela de cadastro
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignupScreen()),
-                );
-              },
-              child: Text(
-                'Não tem uma conta? Cadastre-se!',
-                style: TextStyle(
-                  color: Color(0xFF4A90E2), // Azul pastel mais escuro
-                  fontFamily: 'Poppins',
                 ),
               ),
             ),
