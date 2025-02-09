@@ -16,6 +16,7 @@ class _CustomizeStudyScreenState extends State<CustomizeStudyScreen> {
   final _easyIntervalController = TextEditingController();
 
   int _dailyLimit = 0;
+  int _maxReviewCards = 0;
 
   @override
   void initState() {
@@ -27,11 +28,14 @@ class _CustomizeStudyScreenState extends State<CustomizeStudyScreen> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       int dailyLimit = prefs.getInt('dailyLimit') ?? 0;
+      int maxReviewCards = prefs.getInt('maxReviewCards') ?? 0;
 
       if (mounted) {
         setState(() {
           _dailyLimit = dailyLimit;
+          _maxReviewCards = maxReviewCards;
           _dailyLimitController.text = dailyLimit.toString();
+          _maxReviewCardsController.text = maxReviewCards.toString();
         });
       }
     } catch (e, stackTrace) {
@@ -58,7 +62,10 @@ class _CustomizeStudyScreenState extends State<CustomizeStudyScreen> {
   // Função assíncrona para salvar as configurações
   void _saveSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('dailyLimit', _dailyLimit); // Salvar o limite de cartões
+    await prefs.setInt(
+        'dailyLimit', _dailyLimit); // Salvar o limite de revisões
+    await prefs.setInt('maxReviewCards',
+        _maxReviewCards); // Salvar o limite de criação de cartões
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Configurações salvas com sucesso!')),
     );
@@ -76,12 +83,21 @@ class _CustomizeStudyScreenState extends State<CustomizeStudyScreen> {
     return null;
   }
 
-  // Atualiza o limite diário e salva as configurações
+  // Atualiza o limite diário e o limite de criação de cartões
   void _setDailyLimit(String value) {
     final parsedValue = int.tryParse(value);
     if (parsedValue != null && parsedValue > 0) {
       setState(() {
         _dailyLimit = parsedValue;
+      });
+    }
+  }
+
+  void _setMaxReviewCards(String value) {
+    final parsedValue = int.tryParse(value);
+    if (parsedValue != null && parsedValue > 0) {
+      setState(() {
+        _maxReviewCards = parsedValue;
       });
     }
   }
@@ -104,14 +120,15 @@ class _CustomizeStudyScreenState extends State<CustomizeStudyScreen> {
           children: [
             _buildTextField(
               controller: _dailyLimitController,
-              label: 'Limite de cartões por dia',
+              label: 'Limite de revisões diárias',
               validator: _validateNumber,
               onChanged: (value) => _setDailyLimit(value),
             ),
             _buildTextField(
               controller: _maxReviewCardsController,
-              label: 'Máximo de cartões para revisão',
+              label: 'Máximo de cartões criados por dia',
               validator: _validateNumber,
+              onChanged: (value) => _setMaxReviewCards(value),
             ),
             _buildTextField(
               controller: _difficultIntervalController,
