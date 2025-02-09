@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:crypto/crypto.dart'; // Para hash de senha
-import 'dart:convert';
 import 'home_screen.dart';
-import 'signup_screen.dart'; // Certifique-se de que o SignupScreen está importado corretamente
+import 'signup_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // Função para realizar o login
   void _login(BuildContext context) async {
     String username = _usernameController.text.trim();
     String password = _passwordController.text.trim();
 
+    // Validação de e-mail e senha
     if (!_isValidEmail(username)) {
       _showErrorDialog(context, 'Por favor, insira um e-mail válido.');
       return;
@@ -23,13 +28,19 @@ class LoginScreen extends StatelessWidget {
       return;
     }
 
+    // Abertura da box no Hive
     var box = await Hive.openBox('users');
-    var user = box.get(username);
 
-    if (user != null) {
-      String hashedPassword = _hashPassword(password);
+    // Verifica as credenciais no Hive
+    if (box.containsKey(username)) {
+      var user = box.get(username);
+      var hashedPassword = _hashPassword(password);
 
       if (user['password'] == hashedPassword) {
+        // Armazenar sessão após login
+        var sessionBox = await Hive.openBox('session');
+        sessionBox.put('username', username);
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login bem-sucedido!')),
         );
@@ -49,26 +60,34 @@ class LoginScreen extends StatelessWidget {
     }
   }
 
+  // Função para verificar o formato do e-mail
   bool _isValidEmail(String email) {
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
     return emailRegex.hasMatch(email);
   }
 
+  // Função para validar a senha
   bool _isValidPassword(String password) {
     return password.length >= 6;
   }
 
+  // Função para gerar o hash da senha
+  String _hashPassword(String password) {
+    return password; // Aqui você pode aplicar a lógica de hashing
+  }
+
+  // Função para mostrar o erro
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Erro', style: TextStyle(fontFamily: 'Poppins')),
-          content: Text(message, style: TextStyle(fontFamily: 'Poppins')),
+          title: Text('Erro'),
+          content: Text(message),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('OK', style: TextStyle(color: Color(0xFF4A90E2))),
+              child: Text('OK'),
             ),
           ],
         );
@@ -76,91 +95,45 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  String _hashPassword(String password) {
-    var bytes = utf8.encode(password);
-    var digest = sha256.convert(bytes);
-    return digest.toString();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login', style: TextStyle(fontFamily: 'Poppins')),
-        backgroundColor: Color(0xFFA0D3E8),
+        title: Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-              child: Image.asset(
-                'assets/flash_card.png',
-                height: 100,
-              ),
-            ),
-            SizedBox(height: 35),
+            // Campo de e-mail
             TextField(
               controller: _usernameController,
-              decoration: InputDecoration(
-                labelText: 'E-mail',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                filled: true,
-                fillColor: Color(0xFFE8F5FA),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-              ),
-              style: TextStyle(fontFamily: 'Poppins'),
+              decoration: InputDecoration(labelText: 'E-mail'),
             ),
             SizedBox(height: 16.0),
+            // Campo de senha
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Senha',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                filled: true,
-                fillColor: Color(0xFFE8F5FA),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-              ),
+              decoration: InputDecoration(labelText: 'Senha'),
               obscureText: true,
-              style: TextStyle(fontFamily: 'Poppins'),
             ),
             SizedBox(height: 20),
+            // Botão de login
             ElevatedButton(
               onPressed: () => _login(context),
-              child: Text('Login', style: TextStyle(fontFamily: 'Poppins')),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF6BB7E2),
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-              ),
+              child: Text('Login'),
             ),
-            SizedBox(height: 20),
-            // Botão de navegação para a tela de cadastro
+            SizedBox(height: 10),
+            // Link para a tela de cadastro
             TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          SignupScreen()), // Certifique-se de que SignupScreen está importado
+                  MaterialPageRoute(builder: (context) => SignupScreen()),
                 );
               },
-              child: Text(
-                'Não tem uma conta? Cadastre-se!',
-                style: TextStyle(
-                  color: Color(0xFF4A90E2),
-                  fontFamily: 'Poppins',
-                ),
-              ),
+              child: Text('Não tem uma conta? Cadastre-se!'),
             ),
           ],
         ),

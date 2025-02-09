@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'edit_card_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class CreateDeckScreen extends StatefulWidget {
   final String deckName;
@@ -19,11 +21,29 @@ class CreateDeckScreen extends StatefulWidget {
 
 class _CreateDeckScreenState extends State<CreateDeckScreen> {
   late List<Map<String, String>> _cards;
+  late Box _deckBox;
 
   @override
   void initState() {
     super.initState();
     _cards = widget.initialCards;
+    _initializeHive();
+  }
+
+  void _initializeHive() async {
+    await Hive.initFlutter();
+    _deckBox = await Hive.openBox('decks');
+  }
+
+  void _saveDeck() {
+    final newDeck = {
+      'name': widget.deckName,
+      'description': widget.description,
+      'cards': _cards,
+    };
+
+    _deckBox.add(newDeck); // Salva no Hive
+    Navigator.of(context).pop(newDeck);
   }
 
   // Função para editar um card existente
@@ -73,10 +93,10 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blueAccent, // Cor da AppBar
+        backgroundColor: Colors.blueAccent,
       ),
       body: Container(
-        color: Colors.lightBlue[50], // Cor de fundo do corpo
+        color: Colors.lightBlue[50],
         child: Column(
           children: [
             Expanded(
@@ -117,13 +137,11 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
                   ElevatedButton(
                     onPressed: _addNewCard,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Colors.green, // Cor do botão "Adicionar Card"
+                      backgroundColor: Colors.green,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 12),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(30), // Bordas arredondadas
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                     child: const Text('Adicionar Card',
@@ -131,21 +149,13 @@ class _CreateDeckScreenState extends State<CreateDeckScreen> {
                   ),
                   const SizedBox(width: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop({
-                        'name': widget.deckName,
-                        'description': widget.description,
-                        'cards': _cards,
-                      });
-                    },
+                    onPressed: _saveDeck,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Colors.blue, // Cor do botão "Salvar Baralho"
+                      backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 12),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(30), // Bordas arredondadas
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                     child: const Text('Salvar Baralho',

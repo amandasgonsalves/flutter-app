@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReviewScreen extends StatefulWidget {
   final List<Map<String, String>> cards;
@@ -13,11 +14,30 @@ class _ReviewScreenState extends State<ReviewScreen> {
   int _currentIndex = 0;
   bool _showAnswer = false;
   List<Map<String, String>> _reviewQueue = [];
+  int _dailyLimit = 0;
+  int _cardsReviewed =
+      0; // Variável para controlar quantos cards foram revisados
 
   @override
   void initState() {
     super.initState();
     _reviewQueue = List.from(widget.cards); // Inicializa a fila de revisão
+    _loadDailyLimit();
+  }
+
+  // Função para carregar o limite de cartões salvos
+  Future<void> _loadDailyLimit() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _dailyLimit =
+          prefs.getInt('dailyLimit') ?? 0; // Recupera o limite de cartões
+    });
+  }
+
+  // Função para obter o limite diário
+  Future<int> _getDailyLimit() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('dailyLimit') ?? 0; // Recuperar o limite de cartões
   }
 
   void _nextCard() {
@@ -31,7 +51,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     });
   }
 
-  void _markDifficulty(String difficulty) {
+  void _markDifficulty(String difficulty) async {
     final currentCard = _reviewQueue[_currentIndex];
 
     setState(() {
@@ -51,8 +71,25 @@ class _ReviewScreenState extends State<ReviewScreen> {
           _currentIndex = _currentIndex % _reviewQueue.length;
           break;
       }
+      _cardsReviewed++; // Incrementa o número de cartões revisados
       _nextCard(); // Avança para o próximo card após a marcação
     });
+  }
+
+  // Função para verificar o limite diário antes de continuar revisando
+  Future<void> _checkDailyLimit() async {
+    int dailyLimit = await _getDailyLimit();
+    if (_cardsReviewed >= dailyLimit && dailyLimit > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Você atingiu o limite diário de revisão de cartões.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      // Se não atingiu o limite, permite avançar
+      _markDifficulty('bom'); // Exemplo de chamada de marcação de dificuldade
+    }
   }
 
   @override
@@ -161,21 +198,24 @@ class _ReviewScreenState extends State<ReviewScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                  onPressed: () => _markDifficulty('difícil'),
+                  onPressed:
+                      _checkDailyLimit, // Chama a função de verificação de limite
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
                   child: Text('Difícil'),
                 ),
                 ElevatedButton(
-                  onPressed: () => _markDifficulty('bom'),
+                  onPressed:
+                      _checkDailyLimit, // Chama a função de verificação de limite
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                   ),
                   child: Text('Bom'),
                 ),
                 ElevatedButton(
-                  onPressed: () => _markDifficulty('fácil'),
+                  onPressed:
+                      _checkDailyLimit, // Chama a função de verificação de limite
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),

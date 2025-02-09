@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:flutter_application_1/pages/profile_screen.dart';
 import 'create_deck_screen.dart';
 import 'review_screen.dart';
 import 'settings_screen.dart';
+import 'login_screen.dart'; // Certifique-se de importar a tela de login
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -136,6 +138,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Função para realizar o logout
+  void _logout() async {
+    var sessionBox = await Hive.openBox('session');
+    await sessionBox.clear(); // Limpa a sessão
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,6 +173,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute(builder: (context) => SettingsScreen()),
               );
             },
+          ),
+          IconButton(
+            icon: const Icon(Icons.exit_to_app), // Ícone de logout
+            onPressed: _logout, // Ação de logout
           ),
         ],
       ),

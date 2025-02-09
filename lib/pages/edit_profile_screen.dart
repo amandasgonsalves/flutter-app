@@ -59,6 +59,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return null;
   }
 
+  String formatDate(DateTime date) {
+    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+  }
+
   Future<void> _selectBirthDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -68,8 +72,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
     if (picked != null && picked != DateTime.now()) {
       setState(() {
-        _birthDateController.text =
-            "${picked.day}/${picked.month}/${picked.year}";
+        _birthDateController.text = formatDate(picked);
       });
     }
   }

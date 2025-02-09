@@ -8,7 +8,8 @@ import 'package:hive_flutter/adapters.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('users'); // Abra a caixa 'users'
+  await Hive.openBox('users');
+
   runApp(MyApp());
 }
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Hive Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      initialRoute: '/login', // Define a rota inicial
+      initialRoute: '/login',
       routes: {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignupScreen(),
