@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class EditCardScreen extends StatefulWidget {
   final String question;
@@ -17,6 +18,9 @@ class _EditCardScreenState extends State<EditCardScreen> {
   late TextEditingController _answerController;
   int _dailyLimit = 0;
   int _cardsCreated = 0; // Contador de cartões criados
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _currentText = '';
 
   @override
   void initState() {
@@ -24,6 +28,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
     _questionController = TextEditingController(text: widget.question);
     _answerController = TextEditingController(text: widget.answer);
     _loadDailyLimit();
+    _speech = stt.SpeechToText();
   }
 
   // Carrega o limite diário de cartões
@@ -66,6 +71,27 @@ class _EditCardScreenState extends State<EditCardScreen> {
     });
   }
 
+  void _listen(TextEditingController controller) async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => setState(() => _isListening = val == 'listening'),
+        onError: (val) => setState(() => _isListening = false),
+      );
+      if (available) {
+        setState(() => _isListening = true);
+        _speech.listen(
+          onResult: (val) => setState(() {
+            _currentText = val.recognizedWords;
+            controller.text = _currentText;
+          }),
+        );
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
+  }
+
   @override
   void dispose() {
     _questionController.dispose();
@@ -103,6 +129,10 @@ class _EditCardScreenState extends State<EditCardScreen> {
                 ),
               ),
             ),
+            IconButton(
+              icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
+              onPressed: () => _listen(_questionController),
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: _answerController,
@@ -117,6 +147,10 @@ class _EditCardScreenState extends State<EditCardScreen> {
                   borderSide: const BorderSide(color: Colors.blue),
                 ),
               ),
+            ),
+            IconButton(
+              icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
+              onPressed: () => _listen(_answerController),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
